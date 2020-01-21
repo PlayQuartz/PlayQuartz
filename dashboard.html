@@ -1,0 +1,136 @@
+<html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+	<body style="background-color:rgb(58, 57, 58);">
+		
+		<div>
+			<div class="button-container" style="margin-bottom: 25px; margin-left: 0px">
+				<button type="button" class="btn btn-primary" onclick="toggleLeaderboard()" id="leaderboard" align="center">Leaderboard</button accesskey="h">
+			</div>
+		</div>
+		
+        <form>
+			<input type="text" id="txt" placeholder="Atlantis Magin"/>
+			<input type="text" id="txt2" placeholder="Atlantis Ice"/>
+			
+        </form>
+
+        <form>
+			<input type="text" id="txt3" placeholder="Atlantis LeTsHe"/>
+			<input type="text" id="txt4" placeholder="Atlantis Th0masHD"/>
+        </form>
+
+        <form>
+			<input type="text" id="txt5" placeholder="Atlantis kejseR"/>
+			<input type="text" id="txt6" placeholder="Atlantis Tuckz"/>
+        </form>
+
+        <form>
+			<input type="text" id="txt7" placeholder="Atlantis Kaxie"/>
+			<input type="text" id="txt8" placeholder="Atlantis Devil"/>
+        </form>
+        <form>
+			<input type="text" id="txt9" placeholder="Atlantis MarkusC"/>
+			<input type="text" id="txt10" placeholder="Atlantis Swag"/>
+		</form>
+		
+		<form>
+            <input type="submit" value="Submit" onclick="passvalues();"/>
+		</form>
+		
+	</body>
+</html>
+<style>
+
+input[type='submit'] { width: 432px; height: 20px; background-color:rgb(122, 121, 122); border-top:rgb(122, 121, 122); border-left:rgb(122, 121, 122); border-right: rgb(122, 121, 122); outline-color: rgb(122, 121, 122); text-align: center; border-bottom: rgb(122, 121, 122);} 
+
+input[type='text'] { width: 216px; height: 20px; background-color:rgb(122, 121, 122); border-top:rgb(122, 121, 122); border-left: rgb(122, 121, 122); border-right: rgb(122, 121, 122); outline-color: rgb(122, 121, 122); text-align: center; border-bottom: rgb(122, 121, 122); font-size: 10px;} 
+
+
+.btn{
+	width: 432px;
+	height: 21px;
+	font-size: 10px;
+	text-align: center;
+}
+
+::placeholder {
+  color: white;
+  opacity: 1; 
+}
+
+
+</style>
+<script>
+	
+	function passvalues()
+        {
+            var firstname=document.getElementById("txt").value;
+            localStorage.setItem("textvalue",firstname);
+            var secondname=document.getElementById("txt2").value;
+            localStorage.setItem("textvalue2",secondname);
+            var secondname=document.getElementById("txt3").value;
+            localStorage.setItem("textvalue3",secondname);
+            var secondname=document.getElementById("txt4").value;
+            localStorage.setItem("textvalue4",secondname);
+            var secondname=document.getElementById("txt5").value;
+            localStorage.setItem("textvalue5",secondname);
+			var secondname=document.getElementById("txt6").value;
+            localStorage.setItem("textvalue6",secondname);
+			var secondname=document.getElementById("txt7").value;
+            localStorage.setItem("textvalue7",secondname);
+			var secondname=document.getElementById("txt8").value;
+            localStorage.setItem("textvalue8",secondname);
+			var secondname=document.getElementById("txt9").value;
+            localStorage.setItem("textvalue9",secondname);
+			var secondname=document.getElementById("txt10").value;
+            localStorage.setItem("textvalue10",secondname);
+            return false; 
+        }
+	
+	
+	function toggleLeaderboard()
+	{
+		if(leaderboard.classList.contains("btn-success")) {
+			connection.send("closeLeaderboardRequest");
+		}
+		else{
+			connection.send("activateLeaderboardRequest");
+		}
+	}
+
+	const url = 'ws://164.132.207.111:1347'
+	const connection = new WebSocket(url)
+	
+	connection.onopen = () => {
+		console.log("connected");
+	}
+	
+	connection.onmessage = (message) => {
+		var objMsg = JSON.parse(message.data);
+	
+		if(objMsg.type == "states")
+		{		
+			for (var key in objMsg.states) {
+				if (objMsg.states.hasOwnProperty(key)) { 
+					var keyElem = document.getElementById(key);
+					var state = objMsg.states[key];
+					
+					keyElem.classList.remove('btn-primary');
+					keyElem.classList.remove('btn-success');
+					keyElem.classList.remove('btn-danger');
+
+					if(state) {
+						keyElem.classList.add('btn-success');
+					}
+					else {
+						keyElem.classList.add('btn-danger');
+					}
+				}
+			}
+		}
+	};
+
+	
+</script>
