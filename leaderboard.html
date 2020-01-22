@@ -1,0 +1,249 @@
+<html>
+	<script src="assets/calculate-size.js"></script>
+
+	<div class="container">
+		<div class="leaderboard-title" id="title" style="right: -295px;"></div>	
+		<div class="leaderboard-row row1" id="row1">
+			<p class="row-content" style="font-size: 20px" align="center">Atlantis Letshe</p>
+			<p class="row-content-points" id="row1points" style="font-size: 20px"><span id="result3"></p>
+		</div>
+		<div class="leaderboard-row row2" id="row2">		
+			<p class="row-content" style="font-size: 20px" align="center">Atlantis Tuckz</p>
+			<p class="row-content-points" id="row2points" style="font-size: 20px"><span id="result6"></p>
+		</div>
+		<div class="leaderboard-row row3" id="row3">		
+			<p class="row-content" style="font-size: 20px"  align="center">Atlantis Kaxie</p>
+			<p class="row-content-points" id="row3points" style="font-size: 20px"><span id="result7"></p>
+		</div>	
+		<div class="leaderboard-row row4" id="row4">
+			<p class="row-content" style="font-size: 20px" align="center">Atlantis Magin</p>
+			<p class="row-content-points" id="row4points" style="font-size: 20px"><span id="result"></p>
+		</div>
+		<div class="leaderboard-row row5" id="row5">		
+			<p class="row-content" style="font-size: 20px" align="center">Atlantis ThomasHD</p>
+			<p class="row-content-points" id="row5points" style="font-size: 20px"><span id="result4"></p>
+		</div>
+	</div>
+	
+	<div class="container-body">
+		<div class="total-defeats" id="total-defeats"></div>
+		<div class="total-points" id="total-points"></div>
+	</div>
+	
+</html>
+
+<style>
+
+@font-face {
+	font-family: "Lato-Black";
+	src: url('assets/Lato-Black.ttf');
+}
+
+html{
+	background-image: url();
+	background-repeat: no-repeat;
+}
+
+.container{
+
+}
+
+.container-body{
+	font-family: "NeueHaasDisplay-BlackItalic", Helvetica, Arial, sans-serif;
+	color: white;
+	display: flex;
+	position: absolute;
+	top: 867px;
+	font-size: 23px;
+	left: 315px;
+}
+
+.total-points{
+	margin-left: 58px;
+}
+
+.leaderboard-title{
+	background-image: url(assets/titletop5.png);
+	width: 189px;
+	height: 46px;
+	/*right: 70px;*/
+	
+	position: absolute;
+	z-index: 9999;
+	top: 280px; 
+	transition: all 1s cubic-bezier(0.04, 0.4, 0.29, 1.04);	
+}
+
+.leaderboard-row{
+	font-family: "NeueHaasDisplay-BlackItalic", Helvetica, Arial, sans-serif;
+	color: white;  
+	background-image: url(assets/testatlantis.png);
+	width: 373px;
+	height: 55px;
+	position: absolute;
+	transition: all 0.80s cubic-bezier(0.04, 0.4, 0.29, 1.04);	
+}
+
+
+.row1{
+	top: 340px;
+}
+
+.row2{
+	top: 400px;
+}
+
+.row3{
+	top: 460px;
+}
+
+.row4{
+	top: 520px;
+}
+
+.row5{
+	top: 580px;
+}
+
+body{
+	/*background-color: #000;*/
+}
+
+.row-content{
+	color: white;
+	position: relative;
+	margin-top: 15px;
+	right: 20px;
+    height: auto;
+    width: auto;
+	white-space: nowrap;
+	width: 190px;
+    left:125px;
+	text-align: center;
+}
+
+.row-content-points{
+	color: white;
+	position: absolute;
+	margin-top: 11px;
+	right: 320px;
+	top: 5px;
+	font-size: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	
+}
+
+</style>
+
+<script>
+
+
+	function animateRow(row)
+	{
+		if(row == 6)
+			return;
+			
+		var rowElem = document.getElementById("row" + row);
+		
+		setTimeout(function () {
+			rowElem.style.left = "10px";
+			animateRow(row + 1);
+		}, 300);
+	}
+	
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		getRows();
+		setTimeout(function (){
+			getRows();
+		}, 500);
+		
+		
+		//setInterval(function ()
+		//{
+		//	getRows();
+		//}, 5000);
+	});
+	
+	function activate()
+	{	
+		title.style.left = "100px";
+		animateRow(1);
+	}
+	
+	function closeRows()
+	{		
+		var classElements = document.getElementsByClassName("leaderboard-row");
+		
+		for(var i = 0; i < classElements.length; i++)
+		{
+			var element = classElements[i];
+			
+			element.style.transition = "all 1s cubic-bezier(0.54, 0.1, 0.49, 0.88)";
+			element.style.left = "-435px";
+		}
+
+		var classElementsTitle = document.getElementsByClassName("leaderboard-title");
+
+		for(var i = 0; i < classElementsTitle.length; i++)
+		{
+			var element = classElementsTitle[i];
+			
+			element.style.transition = "all 1s cubic-bezier(0.54, 0.1, 0.49, 0.88)";
+			element.style.left = "-310px";
+		}
+		
+	}
+	
+	const url = 'ws://164.132.207.111:1347'
+	const connection = new WebSocket(url)
+	
+	connection.onopen = () => {
+		console.log("connected");
+	}
+	
+	connection.onmessage = (message) => {
+		var objMsg = JSON.parse(message.data);
+		
+		console.log(objMsg);
+
+		if(objMsg.type == "states")
+		{		
+			for (var key in objMsg.states) {
+				if(key == "leaderboard")
+				{
+					if (objMsg.states.hasOwnProperty(key)) { 
+						var state = objMsg.states[key];
+						
+						if(state) {
+							activate();
+						}
+						else {
+							closeRows();
+						}
+					}
+				}
+				else if(key == "displayTeam")
+				{
+					if (objMsg.states.hasOwnProperty(key)) { 
+						var state = objMsg.states[key];
+						displayTeam = state;					
+					}
+				}
+			}
+		}
+		
+		getRows();
+	}
+
+	document.getElementById("result").innerHTML=localStorage.getItem("textvalue");
+	document.getElementById("result7").innerHTML=localStorage.getItem("textvalue7");
+	document.getElementById("result3").innerHTML=localStorage.getItem("textvalue3");
+	document.getElementById("result4").innerHTML=localStorage.getItem("textvalue4");
+	document.getElementById("result6").innerHTML=localStorage.getItem("textvalue6");
+	document.getElementById("result2").innerHTML=localStorage.getItem("textvalue2");
+	document.getElementById("result5").innerHTML=localStorage.getItem("textvalue5");
+	document.getElementById("result8").innerHTML=localStorage.getItem("textvalue8");
+	document.getElementById("result9").innerHTML=localStorage.getItem("textvalue9");
+	document.getElementById("result10").innerHTML=localStorage.getItem("textvalue10");
+
+</script>
